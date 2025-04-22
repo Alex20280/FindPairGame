@@ -1,4 +1,4 @@
-package com.findpairgame.ui.game
+package com.findpairgame.presentation.screens.game
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

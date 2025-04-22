@@ -1,4 +1,4 @@
-package com.findpairgame.ui.menu
+package com.findpairgame.presentation.screens.menu
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import com.findpairgame.databinding.FragmentWelcomeBinding
-import com.findpairgame.extansions.openScreen
+import com.findpairgame.presentation.extansions.openScreen
 
 @AndroidEntryPoint
 class WelcomeMenuFragment : Fragment() {

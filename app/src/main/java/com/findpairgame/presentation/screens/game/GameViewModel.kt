@@ -1,20 +1,27 @@
-package com.findpairgame.ui.game
+package com.findpairgame.presentation.screens.game
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.findpairgame.R
 import com.findpairgame.data.Card
+import com.findpairgame.data.entity.ResultsEntity
+import com.findpairgame.domain.usecase.InsertUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import java.util.Timer
-import java.util.TimerTask
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class GameViewModel @Inject constructor(): ViewModel() {
+class GameViewModel @Inject constructor(
+    private val insertUserDataUseCase: InsertUserDataUseCase
+): ViewModel() {
 
     private val _timeText = MutableLiveData<String>()
     val timeText: LiveData<String> = _timeText
@@ -22,36 +29,39 @@ class GameViewModel @Inject constructor(): ViewModel() {
     private val _cards = MutableLiveData<List<Card>>()
     val cards: LiveData<List<Card>> = _cards
 
+    private val _isGameFinished = MutableLiveData<Boolean>()
+    val isGameFinished: LiveData<Boolean> = _isGameFinished
+
     private var cardCount: Int = 12 // Default value
 
     private var startTime = 0L
-    private val handler = Handler(Looper.getMainLooper())
+    //private val handler = Handler(Looper.getMainLooper())
 
     private var selectedCards = mutableListOf<Card>()
 
     private val timerHandler = Handler(Looper.getMainLooper())
 
-    init {
-        resetGame()
-    }
 
 
-
-    fun initialize(initialCount: Int) {
+    fun startGame(initialCount: Int) {
+        _isGameFinished.value = false
+        startTimer()
         // Validate and adjust card count
         cardCount = if (initialCount % 2 == 0) initialCount else initialCount + 1
-        resetGame()
-    }
 
-
-    fun resetGame() {
         _cards.value = shuffleCards(cardCount)
-/*        matchedPairs = 0
-        selectedCards.clear()
-        startTime = System.currentTimeMillis()
-        timerHandler.post(timerRunnable)
-        _gameFinished.value = false*/
     }
+
+    fun saveDataToDatabase() {
+        val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        val date = formatter.format(Date())
+        val spentTime = getSpentTime()
+
+        viewModelScope.launch {
+            insertUserDataUseCase.inserUserResults(ResultsEntity(0, spentTime, cardCount, date))
+        }
+    }
+
 
     private fun shuffleCards(count: Int): List<Card> {
         val images = listOf(
@@ -76,7 +86,7 @@ class GameViewModel @Inject constructor(): ViewModel() {
             }
     }
 
-    private val updateRunnable = object : Runnable {
+    private val timeRunnable = object : Runnable {
         override fun run() {
             val elapsed = System.currentTimeMillis() - startTime
             val minutes = (elapsed / 1000) / 60
@@ -85,17 +95,21 @@ class GameViewModel @Inject constructor(): ViewModel() {
 
             _timeText.value = String.format("Time: %02d:%02d:%03d", minutes, seconds, millis)
 
-            handler.postDelayed(this, 50) // update every 50ms for smooth milliseconds
+            timerHandler.postDelayed(this, 50) // update every 50ms for smooth milliseconds
         }
     }
 
     fun startTimer() {
         startTime = System.currentTimeMillis()
-        handler.post(updateRunnable)
+        timerHandler.post(timeRunnable)
     }
 
     fun stopTimer() {
-        handler.removeCallbacks(updateRunnable)
+        timerHandler.removeCallbacks(timeRunnable)
+    }
+
+    private fun getSpentTime(): Long {
+        return System.currentTimeMillis() - startTime
     }
 
     override fun onCleared() {
@@ -118,11 +132,49 @@ class GameViewModel @Inject constructor(): ViewModel() {
 
         // If two cards are selected, check for a match after delay
         if (selectedCards.size == 2) {
-            timerHandler.postDelayed(::checkForMatch, 500)
+            timerHandler.postDelayed(::checkForCardMatch, 500)
         }
     }
 
-    fun checkForMatch() {
+    private fun checkForCardMatch() {
+        if (selectedCards.size != 2) return
+
+        val currentCards = _cards.value?.toMutableList() ?: return
+        val (firstCard, secondCard) = selectedCards
+
+        val firstIndex = currentCards.indexOfFirst { it.id == firstCard.id }
+        val secondIndex = currentCards.indexOfFirst { it.id == secondCard.id }
+
+        if (firstCard.imageResId == secondCard.imageResId) {
+            // Match found
+            if (firstIndex != -1) {
+                currentCards[firstIndex] = currentCards[firstIndex].copy(isMatched = true)
+            }
+            if (secondIndex != -1) {
+                currentCards[secondIndex] = currentCards[secondIndex].copy(isMatched = true)
+            }
+
+            // Check if all pairs are matched
+            if (currentCards.all { it.isMatched }) {
+                _isGameFinished.value = true
+                //timerHandler.removeCallbacks(timeRunnable) // Stop timer
+            }
+
+        } else {
+            // No match - flip back
+            if (firstIndex != -1) {
+                currentCards[firstIndex] = currentCards[firstIndex].copy(isFaceUp = false)
+            }
+            if (secondIndex != -1) {
+                currentCards[secondIndex] = currentCards[secondIndex].copy(isFaceUp = false)
+            }
+        }
+
+        _cards.value = currentCards
+        selectedCards.clear()
+    }
+
+/*    private fun checkForCardMatch() {
         if (selectedCards.size != 2) return
 
         val currentCards = _cards.value?.toMutableList() ?: return
@@ -151,5 +203,5 @@ class GameViewModel @Inject constructor(): ViewModel() {
 
         _cards.value = currentCards
         selectedCards.clear()
-    }
+    }*/
 }

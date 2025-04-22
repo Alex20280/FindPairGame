@@ -1,13 +1,11 @@
-package com.findpairgame.ui.leaderboard
+package com.findpairgame.presentation.screens.leaderboard
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.findpairgame.R
 import com.findpairgame.databinding.FragmentLeaderBoardBinding
-import com.findpairgame.databinding.FragmentWelcomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

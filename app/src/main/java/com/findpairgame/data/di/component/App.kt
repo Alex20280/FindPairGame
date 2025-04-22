@@ -1,4 +1,4 @@
-package com.findpairgame.di.component
+package com.findpairgame.data.di.component
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
