@@ -11,4 +11,7 @@
     <string name="icon">icon</string>
     <string name="good_job">Good job!!! Results are saved to Leaderboard</string>
     <string name="my_results">My Results</string>
+    <string name="seconds">46 sec</string>
+    <string name="pattern">10 cards</string>
+    <string name="date">22 April 2025</string>
 </resources>
