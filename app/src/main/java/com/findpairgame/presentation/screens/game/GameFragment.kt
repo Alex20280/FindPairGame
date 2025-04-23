@@ -29,7 +29,7 @@ class GameFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -37,12 +37,15 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.startGame(args.cards)
+        startGame()
         observeTimer()
         observeGameStatus()
         setupRecyclerAdapter()
 
+    }
 
+    private fun startGame() {
+        viewModel.startGame(args.cards)
     }
 
     private fun observeGameStatus() {
@@ -76,10 +79,5 @@ class GameFragment : Fragment() {
             binding.timerTv.text = time
         }
     }
-
-    private fun startTimer() {
-        viewModel.startTimer()
-    }
-
 
 }

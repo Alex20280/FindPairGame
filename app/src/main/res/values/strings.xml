@@ -14,4 +14,7 @@
     <string name="seconds">46 sec</string>
     <string name="pattern">10 cards</string>
     <string name="date">22 April 2025</string>
+    <string name="mode">Mode</string>
+    <string name="time">Time</string>
+    <string name="date_header">Date</string>
 </resources>

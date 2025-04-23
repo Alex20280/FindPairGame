@@ -2,7 +2,6 @@ package com.findpairgame.presentation.screens.game
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val insertUserDataUseCase: InsertUserDataUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _timeText = MutableLiveData<String>()
     val timeText: LiveData<String> = _timeText
@@ -32,21 +31,16 @@ class GameViewModel @Inject constructor(
     private val _isGameFinished = MutableLiveData<Boolean>()
     val isGameFinished: LiveData<Boolean> = _isGameFinished
 
-    private var cardCount: Int = 12 // Default value
-
+    private var cardCount: Int = 12
     private var startTime = 0L
-    //private val handler = Handler(Looper.getMainLooper())
-
+    private var elapsedTime = 0L
     private var selectedCards = mutableListOf<Card>()
-
     private val timerHandler = Handler(Looper.getMainLooper())
-
 
 
     fun startGame(initialCount: Int) {
         _isGameFinished.value = false
         startTimer()
-        // Validate and adjust card count
         cardCount = if (initialCount % 2 == 0) initialCount else initialCount + 1
 
         _cards.value = shuffleCards(cardCount)
@@ -58,19 +52,17 @@ class GameViewModel @Inject constructor(
         val spentTime = getSpentTime()
 
         viewModelScope.launch {
-            insertUserDataUseCase.inserUserResults(ResultsEntity(0, spentTime, cardCount, date))
+            insertUserDataUseCase.insertUserResults(ResultsEntity(0, spentTime, cardCount, date))
         }
     }
 
-
     private fun shuffleCards(count: Int): List<Card> {
         val images = listOf(
-            R.drawable.apple_icon, R.drawable.bananas_icon, R.drawable.cherries_icon,
-            R.drawable.dragon_fruit_icon, R.drawable.grapes_icon, R.drawable.lemon_icon,
-            R.drawable.orange_icon, R.drawable.passion_fruit_icon, R.drawable.strawberry_icon,
+            R.drawable.avocado_icon, R.drawable.blueberry_icon, R.drawable.grape_icon,
+            R.drawable.kiwi_icon, R.drawable.mango_icon, R.drawable.pear_icon,
+            R.drawable.orange_icon, R.drawable.pineapple_icon, R.drawable.strawberry_icon,
             R.drawable.watermelon_icon
         )
-
         val pairsNeeded = (if (count % 2 == 0) count else count + 1) / 2
         val selectedImages = images.shuffled().take(pairsNeeded)
 
@@ -91,25 +83,24 @@ class GameViewModel @Inject constructor(
             val elapsed = System.currentTimeMillis() - startTime
             val minutes = (elapsed / 1000) / 60
             val seconds = (elapsed / 1000) % 60
-            val millis = elapsed % 1000
 
-            _timeText.value = String.format("Time: %02d:%02d:%03d", minutes, seconds, millis)
-
-            timerHandler.postDelayed(this, 50) // update every 50ms for smooth milliseconds
+            _timeText.value = String.format("Time: %02d:%02d", minutes, seconds)
+            timerHandler.postDelayed(this, 1000)
         }
     }
 
-    fun startTimer() {
+    private fun startTimer() {
         startTime = System.currentTimeMillis()
         timerHandler.post(timeRunnable)
     }
 
     fun stopTimer() {
         timerHandler.removeCallbacks(timeRunnable)
+        elapsedTime = System.currentTimeMillis() - startTime
     }
 
     private fun getSpentTime(): Long {
-        return System.currentTimeMillis() - startTime
+        return if (elapsedTime > 0) elapsedTime else System.currentTimeMillis() - startTime
     }
 
     override fun onCleared() {
@@ -118,19 +109,16 @@ class GameViewModel @Inject constructor(
     }
 
     fun onCardClicked(card: Card) {
-        // Prevent unnecessary operations
         if (card.isFaceUp || selectedCards.size == 2) return
 
         val currentCards = _cards.value?.toMutableList() ?: return
         val clickedIndex = currentCards.indexOfFirst { it.id == card.id }
         if (clickedIndex == -1) return
 
-        // Flip the card and update state
         currentCards[clickedIndex] = currentCards[clickedIndex].copy(isFaceUp = true)
         selectedCards.add(currentCards[clickedIndex])
         _cards.value = currentCards
 
-        // If two cards are selected, check for a match after delay
         if (selectedCards.size == 2) {
             timerHandler.postDelayed(::checkForCardMatch, 500)
         }
@@ -141,32 +129,28 @@ class GameViewModel @Inject constructor(
 
         val currentCards = _cards.value?.toMutableList() ?: return
         val (firstCard, secondCard) = selectedCards
+        val isMatch = firstCard.imageResId == secondCard.imageResId
 
-        val firstIndex = currentCards.indexOfFirst { it.id == firstCard.id }
-        val secondIndex = currentCards.indexOfFirst { it.id == secondCard.id }
+        listOf(firstCard, secondCard).forEach { card ->
+            val index = currentCards.indexOfFirst { it.id == card.id }
+            if (index != -1) {
+                currentCards[index] = currentCards[index].copy(
+                    isMatched = if (isMatch) true else currentCards[index].isMatched,
+                    isFaceUp = isMatch
+                )
+            }
+        }
 
-        if (firstCard.imageResId == secondCard.imageResId) {
-            // Match found
-            if (firstIndex != -1) {
-                currentCards[firstIndex] = currentCards[firstIndex].copy(isMatched = true)
-            }
-            if (secondIndex != -1) {
-                currentCards[secondIndex] = currentCards[secondIndex].copy(isMatched = true)
-            }
+        if (isMatch && currentCards.all { it.isMatched }) {
+            _isGameFinished.value = true
+        }
 
-            // Check if all pairs are matched
-            if (currentCards.all { it.isMatched }) {
-                _isGameFinished.value = true
-                //timerHandler.removeCallbacks(timeRunnable) // Stop timer
-            }
-
-        } else {
-            // No match - flip back
-            if (firstIndex != -1) {
-                currentCards[firstIndex] = currentCards[firstIndex].copy(isFaceUp = false)
-            }
-            if (secondIndex != -1) {
-                currentCards[secondIndex] = currentCards[secondIndex].copy(isFaceUp = false)
+        if (!isMatch) {
+            listOf(firstCard, secondCard).forEach { card ->
+                val index = currentCards.indexOfFirst { it.id == card.id }
+                if (index != -1) {
+                    currentCards[index] = currentCards[index].copy(isFaceUp = false)
+                }
             }
         }
 
@@ -174,34 +158,4 @@ class GameViewModel @Inject constructor(
         selectedCards.clear()
     }
 
-/*    private fun checkForCardMatch() {
-        if (selectedCards.size != 2) return
-
-        val currentCards = _cards.value?.toMutableList() ?: return
-        val (firstCard, secondCard) = selectedCards
-
-        val firstIndex = currentCards.indexOfFirst { it.id == firstCard.id }
-        val secondIndex = currentCards.indexOfFirst { it.id == secondCard.id }
-
-        if (firstCard.imageResId == secondCard.imageResId) {
-            // Cards match – mark them as matched
-            if (firstIndex != -1) {
-                currentCards[firstIndex] = currentCards[firstIndex].copy(isMatched = true)
-            }
-            if (secondIndex != -1) {
-                currentCards[secondIndex] = currentCards[secondIndex].copy(isMatched = true)
-            }
-        } else {
-            // Cards do not match – flip them back down
-            if (firstIndex != -1) {
-                currentCards[firstIndex] = currentCards[firstIndex].copy(isFaceUp = false)
-            }
-            if (secondIndex != -1) {
-                currentCards[secondIndex] = currentCards[secondIndex].copy(isFaceUp = false)
-            }
-        }
-
-        _cards.value = currentCards
-        selectedCards.clear()
-    }*/
 }

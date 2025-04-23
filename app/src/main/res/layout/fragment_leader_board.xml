@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.screens.leaderboard.LeaderBoardFragment">
@@ -11,25 +10,71 @@
         android:id="@+id/centeredTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/my_results"
-        android:textSize="18sp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
+        android:text="@string/my_results"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/headerPattern"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="start"
+        android:text="@string/mode"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/headerTime"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/centeredTv" />
+
+    <TextView
+        android:id="@+id/headerTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/time"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/headerDate"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/headerPattern"
+        app:layout_constraintTop_toBottomOf="@id/centeredTv" />
+
+    <TextView
+        android:id="@+id/headerDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="end"
+        android:paddingStart="0dp"
+        android:paddingEnd="8dp"
+        android:text="@string/date_header"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/headerTime"
+        app:layout_constraintTop_toBottomOf="@id/centeredTv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/resultsRv"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/centeredTv"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/headerPattern" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

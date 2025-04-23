@@ -1,5 +1,6 @@
 package com.findpairgame.presentation.screens.game
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ class CardAdapter(
             if (card.isMatched || card.isFaceUp) {
                 binding.cardImage.setImageResource(card.imageResId)
             } else {
-                binding.cardImage.setImageResource(R.drawable.card_back)
+                binding.cardImage.setImageResource(R.drawable.card_back_icon)
             }
 
             binding.root.setOnClickListener {
@@ -39,6 +40,7 @@ class CardAdapter(
         holder.bind(cards[position])
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCards(newCards: List<Card>) {
         cards = newCards
         notifyDataSetChanged()

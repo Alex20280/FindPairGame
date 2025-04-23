@@ -1,7 +1,6 @@
 package com.findpairgame.data.di.modules
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.room.Room
 import com.findpairgame.data.dao.ResultsDao
 import com.findpairgame.data.database.AppDatabase
@@ -35,7 +34,6 @@ object AppModule {
     fun provideResultsDao(
         appDatabase: AppDatabase,
     ): ResultsDao = appDatabase.resultsDao()
-
 
     @Provides
     @Singleton

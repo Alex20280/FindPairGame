@@ -18,13 +18,14 @@ class WelcomeMenuFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initClickListener()
     }
 
@@ -45,7 +46,6 @@ class WelcomeMenuFragment : Fragment() {
             requireActivity().finish()
         }
     }
-
 
     override fun onDestroyView() {
         _binding = null

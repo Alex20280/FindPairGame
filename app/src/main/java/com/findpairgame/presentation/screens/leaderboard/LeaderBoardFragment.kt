@@ -6,22 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.findpairgame.databinding.FragmentLeaderBoardBinding
-import com.findpairgame.presentation.extansions.goBack
-import com.findpairgame.presentation.screens.game.CardAdapter
-import com.findpairgame.presentation.screens.game.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LeaderBoardFragment : Fragment() {
 
     private var _binding: FragmentLeaderBoardBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: LeaderBoardViewModel by viewModels()
     private lateinit var adapter: LeaderBoardAdapter
 
@@ -38,11 +32,10 @@ class LeaderBoardFragment : Fragment() {
 
         setupRecyclerAdapter()
         observeUserResults()
-
     }
 
     private fun setupRecyclerAdapter() {
-        binding.resultsRv.layoutManager = GridLayoutManager(context, 2)
+        binding.resultsRv.layoutManager = LinearLayoutManager(context)
         adapter = LeaderBoardAdapter(emptyList())
         binding.resultsRv.adapter = adapter
     }

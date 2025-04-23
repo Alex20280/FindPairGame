@@ -9,7 +9,6 @@
     android:padding="16dp"
     tools:context=".presentation.screens.game.GameFragment">
 
-    <!-- Timer TextView -->
     <TextView
         android:id="@+id/timerTv"
         android:layout_width="wrap_content"
@@ -22,9 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cardsRecyclerView"
         android:layout_width="0dp"
@@ -35,7 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Result TextView -->
     <TextView
         android:id="@+id/resultTv"
         android:layout_width="wrap_content"

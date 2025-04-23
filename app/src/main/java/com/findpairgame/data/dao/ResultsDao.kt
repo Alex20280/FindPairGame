@@ -13,6 +13,6 @@ interface ResultsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(result: ResultsEntity)
 
-    @Query("SELECT * FROM user_results ORDER BY time ASC")
+    @Query("SELECT * FROM user_results ORDER BY date ASC")
     fun getAllResults(): LiveData<List<ResultsEntity>>
 }

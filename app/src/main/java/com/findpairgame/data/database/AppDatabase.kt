@@ -5,7 +5,6 @@ import androidx.room.RoomDatabase
 import com.findpairgame.data.dao.ResultsDao
 import com.findpairgame.data.entity.ResultsEntity
 
-
 @Database(
     entities = [ResultsEntity::class],
     version = 1,

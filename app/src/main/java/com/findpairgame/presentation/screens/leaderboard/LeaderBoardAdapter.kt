@@ -1,14 +1,13 @@
 package com.findpairgame.presentation.screens.leaderboard
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.findpairgame.R
-import com.findpairgame.data.Card
 import com.findpairgame.data.entity.ResultsEntity
-import com.findpairgame.presentation.screens.game.CardAdapter
 
 class LeaderBoardAdapter(
     private var results: List<ResultsEntity>
@@ -38,14 +37,17 @@ class LeaderBoardAdapter(
 
     override fun getItemCount(): Int = results.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateResults(newResults: List<ResultsEntity>) {
         results = newResults
         notifyDataSetChanged()
     }
 
-    private fun formatTime(seconds: Long): String {
-        val minutes = seconds / 60
-        val remainingSeconds = seconds % 60
+    private fun formatTime(milliseconds: Long): String {
+        val totalSeconds = milliseconds / 1000
+        val minutes = totalSeconds / 60
+        val remainingSeconds = totalSeconds % 60
         return String.format("%02d:%02d", minutes, remainingSeconds)
     }
+
 }
