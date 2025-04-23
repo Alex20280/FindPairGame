@@ -10,6 +10,7 @@ import com.findpairgame.R
 import com.findpairgame.data.Card
 import com.findpairgame.data.entity.ResultsEntity
 import com.findpairgame.domain.usecase.InsertUserDataUseCase
+import com.findpairgame.domain.usecase.SaveThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

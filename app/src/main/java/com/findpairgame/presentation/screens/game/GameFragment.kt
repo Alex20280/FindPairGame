@@ -65,8 +65,7 @@ class GameFragment : Fragment() {
 
 
     private fun setupRecyclerAdapter() {
-        val cardsCount = args.cards
-        binding.cardsRecyclerView.layoutManager = GridLayoutManager(context, if (cardsCount == 10) 4 else 5)
+        binding.cardsRecyclerView.layoutManager = GridLayoutManager(context, 4)
         adapter = CardAdapter(emptyList()) { card -> viewModel.onCardClicked(card)
         }
         binding.cardsRecyclerView.adapter = adapter

@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/white"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="@string/welcome_to_memory_game"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,38 +24,38 @@
         android:id="@+id/startGame10Btn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/start_game_10_cards"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/startGame20Btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/startGame20Btn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/start_game_20_cards"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/leaderboardBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startGame10Btn"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintTop_toBottomOf="@+id/startGame10Btn" />
 
     <Button
         android:id="@+id/leaderboardBtn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/leaderboard"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/exitBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startGame20Btn"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintTop_toBottomOf="@+id/startGame20Btn" />
 
     <Button
         android:id="@+id/exitBtn"
@@ -68,5 +67,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/leaderboardBtn" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/themeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTitleTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
