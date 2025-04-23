@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -41,7 +42,6 @@ class GameFragment : Fragment() {
         observeTimer()
         observeGameStatus()
         setupRecyclerAdapter()
-
     }
 
     private fun startGame() {
@@ -52,17 +52,31 @@ class GameFragment : Fragment() {
         viewModel.isGameFinished.observe(viewLifecycleOwner) { finished ->
             if (finished) {
                 viewModel.stopTimer()
-                binding.resultTv.visibility = View.VISIBLE
 
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(3000)
-                    viewModel.saveDataToDatabase()
-                    goBack()
-                }
+                showGameFinishedDialog()
             }
         }
     }
 
+    private fun showGameFinishedDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Game Over")
+            .setMessage("Do you want to start over the game?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                viewModel.saveDataToDatabase()
+                viewModel.startGame(args.cards)
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+                viewModel.saveDataToDatabase()
+                goBack()
+            }
+            .create()
+
+        alertDialog.show()
+    }
 
     private fun setupRecyclerAdapter() {
         binding.cardsRecyclerView.layoutManager = GridLayoutManager(context, 4)
@@ -79,4 +93,8 @@ class GameFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
