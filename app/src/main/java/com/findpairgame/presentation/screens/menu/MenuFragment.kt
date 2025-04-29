@@ -7,23 +7,23 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.findpairgame.databinding.FragmentMenuBinding
 import dagger.hilt.android.AndroidEntryPoint
-import com.findpairgame.databinding.FragmentWelcomeBinding
 import com.findpairgame.presentation.extansions.openScreen
 
 @AndroidEntryPoint
-class WelcomeMenuFragment : Fragment() {
+class MenuFragment : Fragment() {
 
-    private var _binding: FragmentWelcomeBinding? = null
+    private var _binding: FragmentMenuBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: WelcomeMenuViewModel by viewModels()
+    private val viewModel: MenuViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMenuBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,15 +62,19 @@ class WelcomeMenuFragment : Fragment() {
 
     private fun initClickListener() {
         binding.startGame10Btn.setOnClickListener {
-            openScreen(WelcomeMenuFragmentDirections.actionWelcomeFragmentToGameFragment(cards = 10))
+            openScreen(MenuFragmentDirections.actionWelcomeFragmentToGameFragment(cards = 10))
         }
 
         binding.startGame20Btn.setOnClickListener {
-            openScreen(WelcomeMenuFragmentDirections.actionWelcomeFragmentToGameFragment(cards = 20))
+            openScreen(MenuFragmentDirections.actionWelcomeFragmentToGameFragment(cards = 20))
+        }
+
+        binding.startGame32Btn.setOnClickListener {
+            openScreen(MenuFragmentDirections.actionWelcomeFragmentToGameFragment(cards = 32))
         }
 
         binding.leaderboardBtn.setOnClickListener {
-            openScreen(WelcomeMenuFragmentDirections.actionWelcomeFragmentToLeaderBoardFragment())
+            openScreen(MenuFragmentDirections.actionWelcomeFragmentToLeaderBoardFragment())
         }
 
         binding.exitBtn.setOnClickListener {

@@ -6,11 +6,8 @@
 
     <ImageView
         android:id="@+id/cardImage"
-        android:padding="6dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:background="@drawable/rounded_background"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:contentDescription="@string/icon" />
 </FrameLayout>

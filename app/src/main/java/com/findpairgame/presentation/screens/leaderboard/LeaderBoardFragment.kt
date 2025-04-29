@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.findpairgame.databinding.FragmentLeaderBoardBinding
+import com.findpairgame.presentation.extansions.goBack
+import com.findpairgame.presentation.extansions.openScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +34,13 @@ class LeaderBoardFragment : Fragment() {
 
         setupRecyclerAdapter()
         observeUserResults()
+        onClickListener()
+    }
+
+    private fun onClickListener() {
+        binding.backIv.setOnClickListener {
+            goBack()
+        }
     }
 
     private fun setupRecyclerAdapter() {

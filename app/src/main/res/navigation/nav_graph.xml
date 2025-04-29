@@ -6,10 +6,10 @@
     app:startDestination="@id/welcomeFragment">
 
     <fragment
-        android:id="@+id/welcomeFragment"
-        tools:layout="@layout/fragment_welcome"
-        android:name="com.findpairgame.presentation.screens.menu.WelcomeMenuFragment"
-        android:label="WelcomeFragment" >
+        android:id="@+id/menuFragment"
+        tools:layout="@layout/fragment_menu"
+        android:name="com.findpairgame.presentation.screens.menu.MenuFragment"
+        android:label="MenuFragment" >
         <action
             android:id="@+id/action_welcomeFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
@@ -27,10 +27,10 @@
             android:name="cards"
             app:argType="integer"
             android:defaultValue="0" />
-
         <action
-            android:id="@+id/action_gameFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            android:id="@+id/action_gameFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/leaderBoardFragment"
@@ -38,7 +38,16 @@
         android:label="fragment_leader_board"
         tools:layout="@layout/fragment_leader_board" >
         <action
-            android:id="@+id/action_leaderBoardFragment_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
+            android:id="@+id/action_leaderBoardFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.findpairgame.presentation.screens.welcome.WelcomeFragment"
+        android:label="WelcomeFragment" >
+
+        <action
+            android:id="@+id/action_welcomeFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
 </navigation>

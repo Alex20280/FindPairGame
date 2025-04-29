@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class WelcomeMenuViewModel @Inject constructor(
+class MenuViewModel @Inject constructor(
     private val saveThemeUseCase: SaveThemeUseCase,
     private val getThemeUseCase: GetThemeUseCase
 ) : ViewModel() {

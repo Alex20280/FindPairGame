@@ -10,7 +10,6 @@ import com.findpairgame.R
 import com.findpairgame.data.Card
 import com.findpairgame.data.entity.ResultsEntity
 import com.findpairgame.domain.usecase.InsertUserDataUseCase
-import com.findpairgame.domain.usecase.SaveThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -37,11 +36,11 @@ class GameViewModel @Inject constructor(
     private var elapsedTime = 0L
     private var selectedCards = mutableListOf<Card>()
     private val timerHandler = Handler(Looper.getMainLooper())
-
+    private var isTimerRunning = false
 
     fun startGame(initialCount: Int) {
         _isGameFinished.value = false
-        startTimer()
+        startOrResumeTimer()
         cardCount = if (initialCount % 2 == 0) initialCount else initialCount + 1
 
         _cards.value = shuffleCards(cardCount)
@@ -62,7 +61,9 @@ class GameViewModel @Inject constructor(
             R.drawable.avocado_icon, R.drawable.blueberry_icon, R.drawable.grape_icon,
             R.drawable.kiwi_icon, R.drawable.mango_icon, R.drawable.pear_icon,
             R.drawable.orange_icon, R.drawable.pineapple_icon, R.drawable.strawberry_icon,
-            R.drawable.watermelon_icon
+            R.drawable.watermelon_icon, R.drawable.cherry_icon, R.drawable.orangejuice_icon,
+            R.drawable.pomegranate_icon, R.drawable.pumpkin_icon, R.drawable.tomato_icon,
+            R.drawable.almond_icon
         )
         val pairsNeeded = (if (count % 2 == 0) count else count + 1) / 2
         val selectedImages = images.shuffled().take(pairsNeeded)
@@ -85,19 +86,38 @@ class GameViewModel @Inject constructor(
             val minutes = (elapsed / 1000) / 60
             val seconds = (elapsed / 1000) % 60
 
-            _timeText.value = String.format("Time: %02d:%02d", minutes, seconds)
+            _timeText.value = String.format("%02d:%02d", minutes, seconds)
             timerHandler.postDelayed(this, 1000)
         }
     }
 
-    private fun startTimer() {
-        startTime = System.currentTimeMillis()
-        timerHandler.post(timeRunnable)
+    private fun startOrResumeTimer() {
+        if (!isTimerRunning) {
+            startTime = System.currentTimeMillis() - elapsedTime
+            timerHandler.post(timeRunnable)
+            isTimerRunning = true
+        }
+    }
+
+    private fun pauseTimer() {
+        if (isTimerRunning) {
+            timerHandler.removeCallbacks(timeRunnable)
+            elapsedTime = System.currentTimeMillis() - startTime
+            isTimerRunning = false
+        }
     }
 
     fun stopTimer() {
         timerHandler.removeCallbacks(timeRunnable)
         elapsedTime = System.currentTimeMillis() - startTime
+    }
+
+    fun toggleTimer() {
+        if (isTimerRunning) {
+            pauseTimer()
+        } else {
+            startOrResumeTimer()
+        }
     }
 
     private fun getSpentTime(): Long {

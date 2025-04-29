@@ -4,30 +4,76 @@
     android:id="@+id/gameFragmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/selectableItemBackground"
+    android:background="@drawable/game_bg"
     android:padding="16dp">
 
+
+    <ImageView
+        android:id="@+id/pauseIv"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/pause_icon"
+        android:scaleType="centerInside"
+        android:src="@drawable/pause_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timerIv" />
+
     <TextView
-        android:id="@+id/timerTv"
+        android:id="@+id/titleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="@string/time_00"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="18sp"
+        android:text="@string/mode_x10"
+        android:textColor="@color/white"
+        android:textSize="19sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cardsRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timerTv" />
+        app:layout_constraintTop_toBottomOf="@id/timerIv" />
+
+    <ImageView
+        android:id="@+id/timerIv"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/timer_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pauseIv"
+        app:layout_constraintTop_toBottomOf="@+id/titleTv"
+        app:srcCompat="@drawable/timer_icon" />
+
+    <TextView
+        android:id="@+id/timerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:padding="8dp"
+        android:text="@string/time_00"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/timerIv"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="@+id/timerIv"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

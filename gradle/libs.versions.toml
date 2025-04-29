@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.0"
-kotlin = "1.9.0"
+kotlin = "2.1.20"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,7 +12,7 @@ constraintlayout = "2.2.1"
 navigationFragmentKtx = "2.8.9"
 nav = "2.7.7"
 room = "2.6.1"
-hiltVersion = "2.50"
+hiltVersion = "2.51.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,7 +35,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.32" }
 
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref ="hiltVersion" }
 
