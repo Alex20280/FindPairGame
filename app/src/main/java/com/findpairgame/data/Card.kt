@@ -1,5 +1,6 @@
 package com.findpairgame.data
 
+
 data class Card(
     val id: Int,
     val imageResId: Int,

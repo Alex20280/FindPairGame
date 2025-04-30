@@ -1,9 +1,10 @@
 package com.findpairgame.presentation.screens.game
 
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
+import android.util.Size
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,17 +13,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.findpairgame.R
 import com.findpairgame.databinding.FragmentGameBinding
 import com.findpairgame.presentation.extansions.goBack
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class GameFragment : Fragment() {
@@ -51,6 +47,7 @@ class GameFragment : Fragment() {
         setupRecyclerAdapter()
         setText()
         onPauseClickListener()
+
     }
 
     private fun onPauseClickListener() {
@@ -78,7 +75,8 @@ class GameFragment : Fragment() {
     }
 
     private fun showGameFinishedDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_game_over_dialog, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.custom_game_over_dialog, null)
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -115,12 +113,50 @@ class GameFragment : Fragment() {
     }
 
     private fun setupRecyclerAdapter() {
-        binding.cardsRecyclerView.layoutManager = GridLayoutManager(context, 4)
-        adapter = CardAdapter(emptyList()) { card -> viewModel.onCardClicked(card)
-        }
-        binding.cardsRecyclerView.adapter = adapter
+        val displayMetrics = resources.displayMetrics
+        val dpToPx = { dp: Int -> (dp * displayMetrics.density).toInt() }
 
-        viewModel.cards.observe(viewLifecycleOwner) { adapter.updateCards(it) }
+        val cardWidth = when (args.cards) {
+            10 -> dpToPx(64)
+            20 -> dpToPx(60)
+            else -> dpToPx(56)
+        }
+
+        val cardHeight = when (args.cards) {
+            10 -> dpToPx(108)
+            20 -> dpToPx(115)
+            else -> dpToPx(95)
+        }
+
+        val cardSize = Size(cardWidth, cardHeight)
+
+        adapter = CardAdapter(cardSize, emptyList()) { card ->
+            viewModel.onCardClicked(card)
+        }
+
+        val layoutManager = CustomCardLayoutManager(requireContext(), cardSize)
+
+        binding.cardsRecyclerView.apply {
+            this.layoutManager = layoutManager
+            adapter = this@GameFragment.adapter
+
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    val space = dpToPx(4)
+                    outRect.set(space, space, space, space)
+                }
+            })
+        }
+
+        viewModel.cards.observe(viewLifecycleOwner) { cards ->
+            adapter.updateCards(cards)
+            binding.cardsRecyclerView.requestLayout()
+        }
     }
 
     private fun observeTimer() {

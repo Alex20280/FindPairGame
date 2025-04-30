@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
         android:contentDescription="@string/balloon_image"
         android:src="@drawable/balloon_image" />
 
@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/loading"
             android:textColor="@color/white"
+            android:fontFamily="@font/baloobhai2_regular"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="8dp" />

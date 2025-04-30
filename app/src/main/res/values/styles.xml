@@ -3,4 +3,10 @@
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar"></style>
+
+    <style name="RoundedImageShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 </resources>
+
