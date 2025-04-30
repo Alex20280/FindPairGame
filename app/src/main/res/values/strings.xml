@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FindPairGame</string>
+    <string name="app_name">Memory Balloons</string>
     <string name="welcome_to_memory_game">Welcome to Find Pair Game</string>
     <string name="start_game_10_cards">Start Game (x10)</string>
     <string name="start_game_20_cards">Start Game (x20)</string>
